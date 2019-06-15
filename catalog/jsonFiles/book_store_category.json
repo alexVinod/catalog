@@ -1,0 +1,62 @@
+[
+    {
+        "category": "Art",
+        "id": 1,
+        "ourUser_id": 2
+    },
+    {
+        "category": "Action",
+        "id": 2,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Business",
+        "id": 3,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Comics",
+        "id": 4,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Cook",
+        "id": 5,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Design",
+        "id": 6,
+        "ourUser_id": 2
+    },
+    {
+        "category": "Education",
+        "id": 7,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Robotics",
+        "id": 8,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Time",
+        "id": 9,
+        "ourUser_id": 2
+    },
+    {
+        "category": "Virtual Reality",
+        "id": 10,
+        "ourUser_id": 1
+    },
+    {
+        "category": "God",
+        "id": 11,
+        "ourUser_id": 1
+    },
+    {
+        "category": "Abc",
+        "id": 12,
+        "ourUser_id": 1
+    }
+]

@@ -1,0 +1,461 @@
+<div class="container">
+<!-- Adding BookShelf -->	
+	<div id="Model1">
+		<div class="modal fade" id="addBookStore" role="dialog">
+			<div class="modal-dialog modal-sm">
+			  <div class="modal-content">
+			    <div class="modal-header bg-primary ">
+			      <button type="button" class="close" data-dismiss="modal">&times;</button>
+			      <h4 class="modal-title">New Book Shelf</h4>
+			    </div>
+			    <div class="modal-body">
+			    	<form action="" id="bookShelfCategory">
+			    		<input type="hidden" id="present_id" name="present_id" value="{{ present_user.user_id }}" readonly="readonly">
+			    		<input type="text" id="bookShelf" name="bookShelf" class="form-control " placeholder="Enter Book Shelf Name :" required="required">
+			    		<input type="submit" class="btn btn-info btn-block mt-1">
+			    	</form>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$("#bookShelfCategory").submit(function(event){
+			$.ajax({
+				data : {
+					present_id		: $("#present_id").val(),
+					category 		: $("#bookShelf").val(),
+				},
+				type : "POST",
+				url  : "/newBookShelf"
+			})
+			.done(function(data) {
+				if(data.error) {
+					swal("Something Went Wrong! \n ", `${data.error}`, "error");
+				} else {
+					swal("Good Job...!", `Your Data Saved Successfully`, "success");
+					setTimeout(location.reload.bind(location), 5000);
+				}
+			})
+			event.preventDefault();
+		})
+	</script>
+
+<!-- Editing BookShelf -->
+	<div id="ShelfEdit1">
+		{% for category in categorys or AllCategorys %}
+		  <div class="modal fade" id="updateShelf{{ category.id }}" role="dialog">
+		    <div class="modal-dialog modal-sm">
+		      <div class="modal-content">
+		        <div class="modal-header bg-primary">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Edit BookShelf</h4>
+		        </div>
+		        <div class="modal-body">
+		        	<form action="" id="editBookStore">
+		        		<input type="hidden" id="shelfId{{ category.id }}" name="shelfId{{ category.id }}" class="form-control" value="{{ category.id }}" readonly="readonly">
+						<input type="hidden" id="beforeShelf{{ category.id }}" name="beforeShelf{{ category.id }}" class="form-control" value="{{ category.category }}" readonly="readonly">	        		
+		        		<input type="text" id="shelfName{{ category.id }}" name="shelfName{{ category.id }}" class="form-control" value="{{ category.category }}" required="required">
+		        		<input type="hidden" id="present_id{{ category.id }}" name="present_id{{ category.id }}" class="form-control" value="{{ present_user.user_id }}" readonly="readonly">
+		        		<center><input type="submit" value="Update" class="btn btn-info btn-block mt-1"></center>		        		
+		        	</form>
+		        </div>
+		      </div>
+		    </div>
+		    <script type="text/javascript">
+				$("#updateShelf{{ category.id }}").submit(function(event){
+					$.ajax({
+						data : {
+							shelfId			: $("#shelfId{{ category.id }}").val(),
+							beforeShelf		: $("#beforeShelf{{ category.id }}").val(),
+							shelfName		: $("#shelfName{{ category.id }}").val(),
+							present_id		: $("#present_id{{ category.id }}").val(),
+						},
+						type 	: "POST",
+						cache	: false,
+						// url 	: $(this).attr('action'),
+						url 	: '/updateBookShelf',
+						// url 	: flask_util.url_for('/updates'),
+					})
+					.done(function(data) {
+						if(data.error) {
+							swal("Something Went Wrong! \n All Fields Must Fill...!", `${data.error}`, "error");					
+						} else {
+							swal("Good Job...!", `Your Data Updated Successfully`, "success");
+							setTimeout(location.reload.bind(location), 2000);
+						}
+					});
+					event.preventDefault();
+				});
+			</script>
+		  </div>
+		{% endfor %}
+	</div>
+
+<!-- Deleting BookShelf -->
+	<div id="ShelfDelete1">
+		{% for category in categorys or AllCategorys %}
+			<div id=Model-Delete-BookShelf>
+				<div class="modal fade" id="deleteShelf{{ category.id }}" role="dialog">
+			    	<div class="modal-dialog modal-sm">
+			      <div class="modal-content">
+			        <div class="modal-header bg-danger">
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			          <h4 class="modal-title">Are You Sure To Delete <strong>{{ category.category }} Shelf ?</strong> </h4>
+			        </div>
+			        <div class="modal-body">
+			        	<div class="row">
+			        		<div class="col-sm-6">
+					          <button type="button" data-toggle="modal" data-target="#deleteShelfs{{ category.id }}" class="btn btn-danger btn-sm pull-right" data-dismiss="modal">Yes</button>			        			
+			        		</div>
+			        		<div class="col-sm-6">
+			          			<button type="button" class="btn btn-info btn-sm" data-dismiss="modal">No</button>		        			
+			        		</div>
+			        	</div>
+			        </div>	
+			      </div>
+			    	</div>
+			  	</div>
+			  	<div class="modal fade" id="deleteShelfs{{ category.id }}" role="dialog">
+				    <div class="modal-dialog modal-md">
+				      <div class="modal-content">
+				        <div class="modal-header bg-danger">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Are You Sure To Delete <strong>{{ category.category }} Book Shelf and All Books Data Also, with Named <strong>{{ category.category }} Shelf ?</strong> </h4>
+				        </div>
+				        <div class="modal-body">
+				        	<form action="" id="deleteBookStore{{ category.id }}" >
+				        		<input type="hidden" id="shelfIds{{ category.id }}" name="shelfId{{ category.id }}" class="form-control" value="{{ category.id }}" readonly="readonly">
+				        		<input type="hidden" id="shelfName{{ category.id }}" name="shelfName{{ category.id }}" class="form-control" value="{{ category.category }}">
+				        		<input type="hidden" id="present_ids{{ category.id }}" name="present_id{{ category.id }}" class="form-control" value="{{ present_user.user_id }}" readonly="readonly">
+					        	<img src="/static/imgs/tornBook.JPG" class="img-responsive" ><br/>
+					        	<div class="row">
+					        		<div class="col-sm-6">
+							          <button type="submit" class="btn btn-danger btn-sm pull-right">Yes</button>			        			
+					        		</div>
+					        		<div class="col-sm-6">
+					          			<button type="button" class="btn btn-info btn-sm" data-dismiss="modal">No</button>		        			
+					        		</div>
+					        	</div>
+					        </form>
+				        </div>	
+				      </div>
+				    </div>
+				</div>	
+				<script type="text/javascript">
+					$("#deleteBookStore{{ category.id }}").submit(function(event){
+						$.ajax({
+							data : {
+								shelfId			: $("#shelfIds{{ category.id }}").val(),								
+								shelfName		: $("#shelfName{{ category.id }}").val(),
+								present_id		: $("#present_ids{{ category.id }}").val(),
+							},
+							type 	: "POST",
+							cache	: false,
+							// url 	: $(this).attr('action'),
+							url 	: '/deleteBookShelf',
+							// url 	: flask_util.url_for('/updates'),
+						})
+						.done(function(data) {
+							if(data.error) {
+								swal("Something Went Wrong! \n All Fields Must Fill...!", `${data.error}`, "error");					
+							} else {
+								swal("Good Job...!", `Your Data Updated Successfully`, "success");
+								setTimeout(location.reload.bind(location), 2000);
+							}
+						});
+						event.preventDefault();
+					});
+				</script>			
+			</div>
+		{% endfor %}
+	</div>
+
+<!-- Adding New Books -->
+	<div id="Model2">
+		<div class="modal fade" id="addBooks" role="dialog">
+		    <div class="modal-dialog modal-md">
+		      <div class="modal-content">
+		        <div class="modal-header bg-black">
+		          <button type="button" class="close text-white-b" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">
+		          	{% if not categoryName.category %}
+		          		Add New Book
+		          	{% else %}
+		          		Add {{ categoryName.category }}
+		          	{% endif %}
+		          </h4>
+		        </div>
+		        <form action="" id="addBooksForm">
+			        <div class="modal-body p-3">
+			          <div class="row mt-1 ">
+			          	<input type="text" id="title" name="title" class="form-control" placeholder="Enter Title :" required="required" autofocus>
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="author" name="author" class="form-control" placeholder="Enter Author Name :" required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	{% if not categoryName.category %}
+				          	<select class="form-control selectMe" id="bookType" name="bookType" required="required">
+				          		<option value="">Select Book Type :</option>
+				          		{% for category in categorys %}
+				          			<option value="{{ category.category }}" id="{{ category.id }}" >
+				          				{{ category.category }} 			          							          				
+				          			</option>			          			
+				          		{% endfor %}
+				          	</select>
+			          	{% else %}
+			          		<input type="text" id="bookType" name="bookType" class="form-control" value="{{ categoryName.category }}" readonly="readonly" required="required">
+			          	{% endif %}
+			          </div>
+
+			          <div class="row mt-1">
+			          	<textarea id="description" name="description" class="form-control" placeholder="Write Your Description" required="required"></textarea>
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="date" id="publishedDate" name="publishedDate" class="form-control" placeholder="Publiblishing Date mm/dd/yyyy" required="required">
+			          </div>
+			          <div class="row mt-1">
+			          	<input type="text" id="publisher" name="publisher" class="form-control" placeholder="Enter Publisher" required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="imageLinks" name="imageLinks" class="form-control" placeholder="Paste Online Image Url" minlength="5" maxlength="2000"  required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="infoLink" name="infoLink" class="form-control" placeholder="Paste Information Link" required="required">
+			          </div>
+
+			          <div class="row mt-1">
+						{% if not categoryName.category %}
+							<input type="text" id="category_id" name="category_id" class="form-control" readonly="readonly" required="required">		
+						{% else %}
+							<input type="text" id="category_id" name="category_id" class="form-control" readonly="readonly" value="{{ categoryName.id }}" readonly="readonly" required="required">
+						{% endif %}
+					  </div>
+
+					  <div class="row mt-1">
+					  	<input type="submit" value="Add Book" class="btn btn-primary btn-sm">
+					  </div>
+			        </div>		        	
+		        </form>
+		      </div>
+		    </div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		  $(".selectMe").change(function(){
+		    //console.log($(this).children(":selected").attr("id"))
+		    getCategoryId = $(this).children(":selected").attr("id");
+		    $("#category_id").val(getCategoryId);
+		    //alert($("#category_id").val())
+		  });
+		});
+
+		$("#addBooksForm").submit(function(event){
+			$.ajax({
+				data : {
+					title 			: $("#title").val(),
+					author 			: $("#author").val(),
+					bookType		: $("#bookType").val(),
+					description 	: $("#description").val(),
+					publishedDate	: $("#publishedDate").val(),
+					publisher 		: $("#publisher").val(),
+					imageLinks 		: $("#imageLinks").val(),
+					infoLink 		: $("#infoLink").val(),
+					category_id		: $("#category_id").val(),
+				},
+
+				type 	: "POST",
+				url 	: "/newBook",
+			})
+			.done(function(data) {
+				if(data.error) {
+					swal("Something Went Wrong! \n All Fields Must Fill...!", `${data.error}`, "error");					
+				} else {
+					swal("Good Job...!", `Your Data Saved Successfully`, "success");
+					setTimeout(location.reload.bind(location), 1000);
+				}
+			});
+			event.preventDefault();
+		});
+		// swal("Good job!", "You clicked the button!", "success");
+	</script>
+
+<!-- Update Books Model -->
+	<div id="Model3">
+		{% for book in books %}
+
+		<div class="modal fade" role="dialog" id="updateBooks{{ book.id }}">
+		    <div class="modal-dialog modal-md">
+		      <div class="modal-content">
+		        <div class="modal-header bg-black">
+		          <button type="button" class="close text-white-b" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">
+		          	Update Book (Cleared any text : press <code> Ctrl + Z </code> to Undo)
+		          </h4>
+		        </div>
+		        <form action="" id="updateBooksForm{{ book.id }}" method="post">
+			        <div class="modal-body p-3">
+			          <div class="row mt-1 ">
+			          	<input type="text" id="bookId{{ book.id }}" name="bookId{{ book.id }}" class="form-control" placeholder="Enter Title :" value="{{ book.id }}" readonly="readonly"  required="required" autofocus>
+			          </div>
+			          	
+			          <div class="row mt-1 ">
+			          	<input type="text" id="titleU{{ book.id }}" name="titleU{{ book.id }}" class="form-control" placeholder="Enter Title :" value="{{ book.title }}"  required="required" autofocus>
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="authorU{{ book.id }}" name="authorU{{ book.id }}" class="form-control" placeholder="Enter Author Name :" value="{{ book.author }}"  required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	<select class="form-control selectMeUpdate{{ book.id }}" id="bookTypeU{{ book.id }}" name="bookTypeU{{ book.id }}" required="required">
+				        	<option value="">Select Book Type :</option>
+			          		{% for category in categorys or categoryUpdate %}
+			          			<option value="{{ category.category }}" id="_{{ category.id }}" >
+			          				{{ category.category }}
+			          			</option>
+			          		{% endfor %}
+				        </select>
+			          </div>
+
+			          <div class="row mt-1">
+			          	<textarea id="descriptionU{{ book.id }}" name="descriptionU{{ book.id }}" class="form-control" placeholder="Write Your Description" required="required">{{ book.description }}</textarea>
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="publishedDateU{{ book.id }}" name="publishedDateU{{ book.id }}" class="form-control" placeholder="Publiblishing Date mm/dd/yyyy" data-toggle="tooltip" data-placement="top" title="Add Publiblishing Date in format : mm/dd/yyyy"   value="{{ book.publishedDate }}" required="required">
+			          </div>
+			          <div class="row mt-1">
+			          	<input type="text" id="publisherU{{ book.id }}" name="publisherU{{ book.id }}" class="form-control" placeholder="Enter Publisher" value="{{ book.publisher }}" required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="imageLinksU{{ book.id }}" name="imageLinksU{{ book.id }}" class="form-control" placeholder="Paste Online Image Url" minlength="5" maxlength="2000" value="{{ book.imageLinks }}" required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="infoLinkU{{ book.id }}" name="infoLinkU{{ book.id }}" class="form-control" placeholder="Paste Information Link" value="{{ book.infoLink }}" required="required">
+			          </div>
+
+			          <div class="row mt-1">
+			          	<input type="text" id="category_ids{{ book.id }}" name="category_ids" class="form-control category_ids{{ book.id }}" value="{{book.category_id }}" readonly="readonly"  required="required">
+					  </div>
+
+					  <div class="row mt-1">
+					  	<input type="submit" value="Update Book" class="btn btn-primary btn-sm">
+					  </div>
+			        </div>		        	
+		        </form>
+		      </div>
+		    </div>
+			<script type="text/javascript">{{ book.id }}
+				$(document).ready(function(){
+				  $(".selectMeUpdate{{ book.id }}").change(function(){
+				    getCategoryIdU = $(this).children(":selected").attr("id").replace('_','');
+				    //console.log("data",getCategoryIdU)
+				    $(".category_ids{{ book.id }}").val(getCategoryIdU);
+				  });
+				});
+
+
+				$("#updateBooksForm{{ book.id }}").submit(function(event){
+					$.ajax({
+						data : {
+							id 				: $("#bookId{{ book.id }}").val(),
+							title 			: $("#titleU{{ book.id }}").val(),
+							author 			: $("#authorU{{ book.id }}").val(),
+							bookType		: $("#bookTypeU{{ book.id }}").val(),
+							description 	: $("#descriptionU{{ book.id }}").val(),
+							publishedDate	: $("#publishedDateU{{ book.id }}").val(),
+							publisher 		: $("#publisherU{{ book.id }}").val(),
+							imageLinks 		: $("#imageLinksU{{ book.id }}").val(),
+							infoLink 		: $("#infoLinkU{{ book.id }}").val(),
+							category_id		: $("#category_ids{{ book.id }}").val(),
+						},
+						type 	: "POST",
+						cache	: false,
+						// url 	: $(this).attr('action'),
+						url 	: '/booksUpdates',
+						// url 	: flask_util.url_for('/updates'),
+					})
+					.done(function(data) {
+						if(data.error) {
+							swal("Something Went Wrong! \n All Fields Must Fill...!", `${data.error}`, "error");					
+						} else {
+							swal("Good Job...!", `Your Data Updated Successfully`, "success");
+							setTimeout(location.reload.bind(location), 2000);
+						}
+					});
+					event.preventDefault();
+				});
+			</script>
+		</div>		
+		{% endfor %}
+	</div>
+
+<!-- Delete Books Model -->
+	<div id="Model3">
+		{% for book in books %}
+		<div class="modal fade" role="dialog" id="deleteBooks{{ book.id }}">
+		    <div class="modal-dialog modal-sm">
+		      <div class="modal-content">
+		        <div class="modal-header bg-danger">
+		          <button type="button" class="close text-white-b bg-black" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">
+		          	Are You Sure Want To Delete <b>{{ book.title }}</b> Book ?
+		          </h4>
+		        </div>		        
+		        <div class="modal-body p-3">
+				  <div class="row mt-1">
+				  	<form id="deleteBooksForm{{ book.id }}">
+					  	<input type="hidden" id="bookId{{ book.id }}" name="bookId{{ book.id }}" value="{{ book.id }}">
+					  	<div class="col-sm-6"><input type="submit" value="Yes" class="btn btn-danger center-block btn-sm pull-right"></div>
+					  	<div class="col-sm-6"><input type="button" value="No" class="btn btn-info center-block btn-sm pull-left" data-dismiss="modal" ></div>
+				  	</form>
+				  </div>
+		        </div>		        	
+		      </div>
+		    </div>
+			<script type="text/javascript">
+				$("#deleteBooksForm{{ book.id }}").submit(function(event){
+					$.ajax({
+						data : {
+							id 	: $("#bookId{{ book.id }}").val(),							
+						},
+						type 	: "POST",
+						url 	: '/removeBooks',
+						cache	: false,						
+						
+						// url 	: flask_util.url_for('/deletes'),
+					})
+					.done(function(data) {
+						if(data.error) {
+							swal("Something Went Wrong! \n All Fields Must Fill...!", `${data.error}`, "error");					
+						} else {
+							swal("Good Job...!", `Your Data Deleted Successfully`, "success");
+							setTimeout(location.reload.bind(location), 2000);
+						}
+					});
+					event.preventDefault();
+				});
+			</script>
+		</div>		
+		{% endfor %}
+	</div>
+</div>
+
+
+
+
+<!-- // swal({
+//   title: "Good job!",
+//   text: "New Book Added for : "+ $("#bookType").val(),
+//   icon: "success",
+// }); -->

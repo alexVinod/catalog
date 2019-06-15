@@ -1,0 +1,47 @@
+<div class="">
+	<nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container-fluid" style="background:#00aaff;">
+	    <div class="navbar-header">
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span> 
+			</button>
+			{% if 'username' in present_user %}	
+				<img src="{{ present_user.picture }}" class="img-responsive myAnim cursor-pointer"  alt="noImageFound" style="width: 46px; height: 46px;margin-top: 1px;border-radius: 50%; box-shadow: 0px 0px 8px #FFF;" >
+		    {% else %}
+		    	<a class="navbar-brand" href="#">Novels</a>
+		    {% endif %}
+	    </div>
+	    <div class="collapse navbar-collapse t-white " id="myNavbar">
+	      <ul class="nav navbar-nav">
+	        <li><a href="#" onclick="home()">Home</a></li>
+	        <li><a href="#" onclick="about()">About</a></li>
+	        <!-- <li><a href="#">Contact</a></li> 
+	        <li><a href="#">Events</a></li> -->
+	        <li><a href="#" onclick="AllJson()" data-toggle="tooltip" data-placement="bottom" title="All JSON URL: /allJSON">ALL JSON</a></li> 
+	        <a href="#" class="btn btn-info btn-xs mt-2 fas fa-refresh pull-right" onclick="location.reload()" data-toggle="tooltip" data-placement="bottom" title="Refresh Page"> </a>
+	    </ul>
+	    {% if 'username' in present_user %}
+			<ul class="nav navbar-nav navbar-right ">
+				<li><a href="#" onclick="logout()"  ><span class="glyphicon glyphicon-log-out"></span> Logout( {{ present_user.email }} )</a></li>
+			</ul>
+		{% else %}
+			<ul class="nav navbar-nav navbar-right ">
+				<!-- <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li> -->
+				<li><a href="#" onclick="login();" ><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+			</ul>
+		{% endif %}
+	    </div>
+	  </div>
+	</nav>
+	<div class="mt-5"></div>
+	<script type="text/javascript">
+		$(".myAnim").mouseover(function(){
+			$(".myAnim").addClass("animated jello");
+		});
+		$(".myAnim").mouseleave(function(){
+			$(".myAnim").removeClass("animated jello")
+		})
+	</script>
+</div>

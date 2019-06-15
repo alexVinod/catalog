@@ -1,0 +1,45 @@
+<div class="row">
+	{% for book in books %}
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var txt= $('#less{{book.id}}').text();
+				if(txt.length > 105)
+				    $('#less{{book.id}}').text(txt.substring(0,100) + '.....');
+			});
+
+			$(document).ready(function(){
+				var txt1= $('#title{{book.id}}').text();
+				if(txt1.length >38){
+					$('#title{{book.id}}').text(txt1.substring(0,38) + '.....');
+				    $('#less{{book.id}}').text(txt1.substring(0,110) + '.....');
+				}
+			});
+
+		</script>
+		<div id="CardContent" class="col-xs-12 col-sm-6 col-md-3 col-lg-3 " style="" >
+			<div class="panel panel-info hover-top card-bb">						  
+			{% if book.imageLinks|length > 1 %}
+			  <img src="/static/imgs/{{book.imageLinks}}" alt="{{ book.imageLinks }}" class="img-fluid img-responsive blur-me" style="width:100%;height: 200px;margin: 0 auto;">
+			{% else %}
+				<img src="/static/imgs/books2.jpg" alt="NoImage" class="img-fluid img-responsive blur-me" style="width:100%;height: 200px;margin: 0 auto;">
+			{% endif %}					  
+			  <div class="bg-black" id="title{{ book.id }}">{{book.title}} -- {{ book.author}} <span style="font-size: 10px;">(Author)</span></div>
+			  <div class="panel-body">
+			  	<p id="less{{book.id}}">{{book.description}}</p>
+
+			  	<div class="row">
+			  		<div class="col-xs-4">
+			  			<a href="" class="btn btn-primary btn-sm fas fa-edit"></a>
+			  		</div>	
+			  		<div class="col-xs-4">
+			  			<a href="" class="btn btn-danger btn-sm fas fa-remove"></a>
+			  		</div>	
+			  		<div class="col-xs-4">
+			  			<a href="{{ book.infoLink}}" class="btn btn-info btn-sm pull-right fas fa-link" target="_tab"> Link</a>						  			
+			  		</div>	
+			  	</div>
+			  </div>
+			</div>	
+		</div>
+	{% endfor %}
+</div>

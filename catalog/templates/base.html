@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Our Zone</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="icon" href="/static/imgs/favicon.ico">
+  	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+  	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+  	<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+  	<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+  	<link rel="stylesheet" type="text/css" href="/static/css/fa-all.min.css">  	
+  	<link rel="stylesheet" type="text/css" href="/static/css/animateL.css">
+  	<link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+  	<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+  	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+  	<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    {{ fujs.js }}
+
+</head>
+<body >
+	{% include 'header.html' %}
+	<div>
+		{% with messages= get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category,message in messages %}
+					<div class="alert alert-{{ category }} alert-dismissible">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>{{ message }}</strong>
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}		
+	</div>
+	<div id="main">
+		{% block main %}
+			<div id="content" class="myContent">
+				{% block content %}
+
+				{% endblock %}
+			</div>			
+		{% endblock %}		
+	</div>
+
+	
+  	<script type="text/javascript" src="/static/js/wow.min.js"></script>
+  	<script type="text/javascript" src="/static/js/bootstrap-dropdown-hover.min.js"></script>
+  	<script type="text/javascript" src="/static/js/sweetalert.min.js"></script>
+  	<script type="text/javascript" src="/static/js/myScripts.js"></script>
+</body>
+<script type="text/javascript">
+	// $(".navbar-default .navbar-nav>li>a").click(function(){
+	// 	$(this).css({'color':'#00aaff','background-color':'#FFF'})
+	// 	$(this).siblings().click(function(){
+	// 		$(this).css({'color':'#FFF','background-color':''})
+	// 	})
+	// })
+
+	$(document).ready(function(){
+	  $('[data-toggle="tooltip"]').tooltip();   
+	});
+	
+</script>
+ <script>new WOW().init();</script>
+
+</html>

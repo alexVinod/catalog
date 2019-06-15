@@ -1,0 +1,41 @@
+<div>
+	<div>
+		<div>
+			{% if 'username' in present_user %}
+				<span data-toggle="modal" data-target="#addBookStore">
+					<a href="#" class="btn btn-info btn-xs fas fa-plus-circle ml-1 pull-right" data-toggle="tooltip" data-placement="bottom" title="Add New BookShelf" ></a>
+				</span>
+			{% endif %}
+			<a href="#" class="btn btn-info btn-xs fas fa-files-o ml-1 pull-right" onclick="ShowCategorys()" data-toggle="tooltip" data-placement="bottom" title="Json Data URL : /showAllBookShelf/JSON"> </a>
+			<a href="#" class="btn btn-info btn-xs fas fa-cog pull-right"> </a>			
+		</div>
+		<br>
+	</div>
+
+	<ul class="navs nav nav-pills nav-stacked" id="my-category">
+		<li class="text-bold row">
+			<a href="#" class="col-sm-8" onclick="category('ALL')">ALL</a>
+			<a href="#" class="col-sm-2 btn btn-link btn-xs fas fa-files-o text-primary pull-right" onclick="showSingleBookShelf(`{{ url_for('showSingleBookShelf', bookShelf='ALL') }}`)" data-toggle="tooltip" data-placement="right" title="Json Data URL : /showSingleBookShelf/ALL/JSON"></a>
+		</li>
+	{% for category in categorys or AllCategorys %}
+	    <li class="text-bold row">
+	    	<a href="#" class="col-sm-6" onclick="category(`{{ url_for('category', categoryName=category.category) }}`)">{{ category.category }}</a>
+	    	{% if present_user.user_id == category.ourUser_id  %}
+	    		<span data-toggle="modal" data-target="#deleteShelf{{ category.id }}">
+	    			<a href="#" class="col-sm-2 btn btn-link btn-xs fas fa-remove pull-right bg-danger" data-toggle="tooltip" data-placement="left" title="Delete {{ category.category }}"  style="color: red; text-shadow: 0px 0px 3px indianred;margin-top: 10px;"></a>
+	    		</span>
+	    		<span data-toggle="modal" data-target="#updateShelf{{ category.id }}">
+		    		<a href="#" class="col-sm-2 btn btn-link btn-xs fas fa-edit pull-right" data-toggle="tooltip" data-placement="right" title="Edit {{ category.category }}" style="color: #00695c; text-shadow: 0px 0px 3px #00695c;margin-top: 10px;" ></a>
+	    		</span>
+	    	{% endif %}
+
+	    	<a href="#" class="col-sm-2 btn btn-link btn-xs fas fa-files-o pull-right" onclick="showSingleBookShelf(`{{ url_for('showSingleBookShelf', bookShelf=category.category ) }}`)" data-toggle="tooltip" data-placement="right" title="Json Data URL : /showSingleBookShelf/ {{ category.category }}/JSON" ></a>
+	    </li>
+	{% endfor %}
+	</ul>
+	<script>
+		$(".fa-cog").click(function(){
+			$("#my-category").slideToggle();
+		});
+	</script>
+</div>	
